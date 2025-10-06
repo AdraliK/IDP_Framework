@@ -2,18 +2,18 @@ package ru.pflb.framework.client;
 
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import io.restassured.specification.ResponseSpecification;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static io.restassured.RestAssured.given;
 
 public abstract class BaseApiClient {
 
+    protected static final Logger log = LoggerFactory.getLogger(BaseApiClient.class);
     protected RequestSpecification requestSpec;
-    protected ResponseSpecification responseSpec;
 
-    public BaseApiClient(RequestSpecification requestSpec, ResponseSpecification responseSpec) {
+    public BaseApiClient(RequestSpecification requestSpec) {
         this.requestSpec = requestSpec;
-        this.responseSpec = responseSpec;
     }
 
     protected Response get(String endpoint) {
@@ -21,7 +21,6 @@ public abstract class BaseApiClient {
                 .spec(requestSpec)
                 .get(endpoint)
                 .then()
-                .spec(responseSpec)
                 .extract()
                 .response();
     }
@@ -32,7 +31,6 @@ public abstract class BaseApiClient {
                 .body(body)
                 .post(endpoint)
                 .then()
-                .spec(responseSpec)
                 .extract()
                 .response();
     }
@@ -43,7 +41,6 @@ public abstract class BaseApiClient {
                 .body(body)
                 .put(endpoint)
                 .then()
-                .spec(responseSpec)
                 .extract()
                 .response();
     }

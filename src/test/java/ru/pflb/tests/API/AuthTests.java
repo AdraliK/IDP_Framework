@@ -15,7 +15,7 @@ import static ru.pflb.framework.steps.ApiSteps.login;
 import static ru.pflb.framework.steps.ApiSteps.unSuccessLogin;
 
 @Epic("API тесты")
-@Feature("Тестирование авторизации")
+@Feature("Авторизация")
 @Severity(SeverityLevel.CRITICAL)
 @Tag("api")
 @Tag("auth")
