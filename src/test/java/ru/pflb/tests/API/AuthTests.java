@@ -1,17 +1,15 @@
 package ru.pflb.tests.API;
 
-import io.qameta.allure.Epic;
-import io.qameta.allure.Feature;
-import io.qameta.allure.Severity;
-import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.*;
+import io.restassured.http.Method;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import ru.pflb.framework.utils.DataKeys;
 import ru.pflb.framework.utils.DataStorage;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static ru.pflb.framework.steps.ApiSteps.login;
-import static ru.pflb.framework.steps.ApiSteps.unSuccessLogin;
+import static ru.pflb.framework.steps.ApiSteps.*;
 
 @Epic("API тесты")
 @Feature("Авторизация")
@@ -23,7 +21,7 @@ public class AuthTests extends BaseTests {
 
     @BeforeEach
     void beforeLogin() {
-        DataStorage.put("authToken", login("user"));
+        DataStorage.put(DataKeys.AUTH_TOKEN, login("user"));
     }
 
     @DisplayName("Проверка успешной авторизации")

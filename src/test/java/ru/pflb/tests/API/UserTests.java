@@ -1,17 +1,14 @@
 package ru.pflb.tests.API;
 
-import io.qameta.allure.Epic;
-import io.qameta.allure.Feature;
-import io.qameta.allure.Severity;
-import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.*;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import ru.pflb.framework.dto.User;
+import ru.pflb.framework.steps.BusinessApiSteps;
+import ru.pflb.framework.utils.DataKeys;
 import ru.pflb.framework.utils.DataStorage;
 import ru.pflb.framework.utils.JsonUtils;
 import ru.pflb.framework.utils.Operator;
@@ -31,47 +28,21 @@ public class UserTests extends AuthTests {
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Провекрка жизненного цикла пользователя")
     void userLifecycleTest() {
-        String authToken = DataStorage.get("authToken");
-
         User userRequest = JsonUtils.getJsonAsPojo("user.json", User.class);
+
+        User createdUser = BusinessApiSteps.createUser(userRequest);
+        int userId = createdUser.getId();
+        userRequest.setId(userId);
+        checkEqualsDto(userRequest, createdUser);
+
+        User fetchedUser = BusinessApiSteps.getUser(userId);
+        checkEqualsDto(userRequest, fetchedUser);
+
+        BusinessApiSteps.deleteUser(userId);
         Response response = sendRequest(
-                Method.POST,
-                "/user",
-                userRequest,
-                authToken
-        );
-        checkResponseStatusCode(response, 201);
-        checkResponseMatchesDto(response, User.class);
-        User userResponse = response.as(User.class);
-        userRequest.setId(userResponse.getId());
-        checkEqualsDto(userRequest, userResponse);
-
-        int userId = userResponse.getId();
-
-        response = sendRequest(
                 Method.GET,
                 "/user/" + userId,
-                null,
-                authToken
-        );
-        checkResponseStatusCode(response, 200);
-        checkResponseMatchesDto(response, User.class);
-        userResponse = response.as(User.class);
-        checkEqualsDto(userRequest, userResponse);
-
-        response = sendRequest(
-                Method.DELETE,
-                "/user/" + userId,
-                null,
-                authToken
-        );
-        checkResponseStatusCode(response, 204);
-
-        response = sendRequest(
-                Method.GET,
-                "/user/" + userId,
-                null,
-                authToken
+                null
         );
         checkResponseStatusCode(response, 204);
         String responseBody = response.getBody().asString();
@@ -85,8 +56,7 @@ public class UserTests extends AuthTests {
         Response response = sendRequest(
                 Method.POST,
                 "/user",
-                userRequest,
-                DataStorage.get("authToken")
+                userRequest
         );
         checkResponseStatusCode(response, 400);
     }
@@ -96,33 +66,58 @@ public class UserTests extends AuthTests {
     @ParameterizedTest(name = "начисление денег: {0}")
     @ValueSource(strings = {"50.00", "243.06"})
     void addMoneyToUserTest(String moneyAmount) {
-        String authToken = DataStorage.get("authToken");
+        User user = JsonUtils.getJsonAsPojo("user.json", User.class);
 
-        User userRequest = JsonUtils.getJsonAsPojo("user.json", User.class);
-        Response response = sendRequest(
-                Method.POST,
-                "/user",
-                userRequest,
-                authToken
-        );
-        checkResponseStatusCode(response, 201);
-        User userResponse = response.as(User.class);
-        int userId = userResponse.getId();
-        DataStorage.put("userId", Integer.toString(userId));
-        BigDecimal lastMoney = userResponse.getMoney();
+        User createdUser = BusinessApiSteps.createUser(user);
+        int userId = createdUser.getId();
+        DataStorage.put(DataKeys.USER_ID, Integer.toString(userId));
 
         BigDecimal amount = new BigDecimal(moneyAmount);
-        response = sendRequest(
+        BigDecimal previousMoney = createdUser.getMoney();
+        User updatedUser = BusinessApiSteps.addMoneyToUser(createdUser.getId(), amount);
+
+        BigDecimal expectedMoney = previousMoney.add(amount);
+        checkComparison(updatedUser.getMoney(), expectedMoney, Operator.EQUALS);
+    }
+
+    @Test
+    @Tag("cleanData")
+    @DisplayName("Проверка попытки начисления отрицательной суммы пользователю")
+    void addNegativeMoneyToUserTest() {
+        User user = JsonUtils.getJsonAsPojo("user.json", User.class);
+        User createdUser = BusinessApiSteps.createUser(user);
+        int userId = createdUser.getId();
+        DataStorage.put(DataKeys.USER_ID, Integer.toString(userId));
+
+        BigDecimal negativeAmount = new BigDecimal("-50.00");
+
+        Response response = sendRequest(
                 Method.POST,
-                "/user/%s/money/%s".formatted(userId, amount),
-                null,
-                authToken
+                "/user/%s/money/%s".formatted(userId, negativeAmount),
+                null
         );
-        checkResponseStatusCode(response, 200);
-        userResponse = response.as(User.class);
-        BigDecimal nowMoney = userResponse.getMoney();
-        BigDecimal addMoney = lastMoney.add(amount);
-        checkComparison(nowMoney, addMoney, Operator.EQUALS);
+
+        checkResponseStatusCode(response, 400);
+    }
+
+    @AfterEach
+    void cleanData(TestInfo info) {
+        if (!info.getTags().contains("cleanData")) return;
+
+        Allure.step("Очистка данных после теста", () -> {
+            String authToken = DataStorage.get(DataKeys.AUTH_TOKEN);
+            String userId = DataStorage.get(DataKeys.USER_ID);
+
+            if (userId != null && authToken != null) {
+                sendRequest(
+                        Method.DELETE,
+                        "/user/" + userId,
+                        null
+                );
+            }
+
+            DataStorage.clear();
+        });
     }
 
 }

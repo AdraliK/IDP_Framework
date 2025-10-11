@@ -8,9 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.pflb.framework.client.AuthApiClient;
 import ru.pflb.framework.client.AuthorizedApiClient;
-import ru.pflb.framework.utils.Config;
-import ru.pflb.framework.utils.JsonUtils;
-import ru.pflb.framework.utils.Operator;
+import ru.pflb.framework.utils.*;
 
 import java.util.List;
 
@@ -55,9 +53,9 @@ public class ApiSteps {
     }
 
     @Step("Выполнен {method} запрос на endpoint '{endpoint}' с токеном авторизаци")
-    public static Response sendRequest(Method method, String endpoint, Object body, String authToken) {
+    public static Response sendRequest(Method method, String endpoint, Object body) {
         logRequestBody(body);
-        AuthorizedApiClient apiClient = new AuthorizedApiClient(authToken);
+        AuthorizedApiClient apiClient = new AuthorizedApiClient(DataStorage.get(DataKeys.AUTH_TOKEN));
         Response response = apiClient.sendRequest(method, endpoint, body);
         logResponseBody(response.getBody().asString());
         return response;
