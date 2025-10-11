@@ -4,11 +4,10 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import ru.pflb.framework.utils.DataStorage;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.pflb.framework.steps.ApiSteps.login;
@@ -21,6 +20,11 @@ import static ru.pflb.framework.steps.ApiSteps.unSuccessLogin;
 @Tag("auth")
 @Tag("smoke")
 public class AuthTests extends BaseTests {
+
+    @BeforeEach
+    void beforeLogin() {
+        DataStorage.put("authToken", login("user"));
+    }
 
     @DisplayName("Проверка успешной авторизации")
     @ParameterizedTest(name = "пользователь: {0}")
