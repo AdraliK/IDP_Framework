@@ -1,7 +1,6 @@
 package ru.pflb.tests.API;
 
 import io.qameta.allure.*;
-import io.restassured.http.Method;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -9,7 +8,7 @@ import ru.pflb.framework.utils.DataKeys;
 import ru.pflb.framework.utils.DataStorage;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static ru.pflb.framework.steps.ApiSteps.*;
+import static ru.pflb.framework.steps.api.technical.ApiSteps.*;
 
 @Epic("API тесты")
 @Feature("Авторизация")

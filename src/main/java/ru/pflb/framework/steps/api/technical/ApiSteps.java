@@ -1,5 +1,8 @@
-package ru.pflb.framework.steps;
+package ru.pflb.framework.steps.api.technical;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import io.restassured.http.Method;
@@ -10,7 +13,10 @@ import ru.pflb.framework.client.AuthApiClient;
 import ru.pflb.framework.client.AuthorizedApiClient;
 import ru.pflb.framework.utils.*;
 
+import java.nio.file.Files;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -75,14 +81,48 @@ public class ApiSteps {
     }
 
     @Step("Из тела ответа получен список по JsonPath '{jsonPath}'")
-    public static <T> List<T> getListFromResponse(Response response, String jsonPath, Class<T> type) {
-        logResponseBody(response.getBody().asString());
-        List<T> list = response.jsonPath().getList(jsonPath, type);
+    public static <T> List<T> getJsonPathListFromResponse(Response response, String jsonPath, Class<T> type) {
+        String responseBody = response.getBody().asString();
+        logResponseBody(responseBody);
+
+        if (responseBody == null || responseBody.isBlank() || responseBody.equals("[]")) {
+            log.warn("Ответ пустой или содержит пустой массив");
+            return Collections.emptyList();
+        }
+
+        List<T> list;
+        try {
+            list = response.jsonPath().getList(jsonPath, type);
+        } catch (Exception e) {
+            throw new AssertionError("Невозможно получить список из ответа", e);
+        }
 
         if (list == null || list.isEmpty()) {
             log.warn("По JsonPath '{}' список пустой или отсутствует", jsonPath);
         } else {
             log.info("По JsonPath '{}' получен список из {} элементов: {}", jsonPath, list.size(), list);
+            Allure.addAttachment("Список элементов: ", JsonUtils.getPojoAsString(list));
+        }
+
+        return list;
+    }
+
+    public static <T> List<T> getListFromResponse(Response response, Class<T> type) {
+        String objectName = type.getSimpleName();
+        Allure.step("Из тела ответа получен список элементов '%s'".formatted(objectName), () -> {});
+
+        String responseBody = response.getBody().asString();
+        logResponseBody(responseBody);
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<T> list;
+        try {
+            list = mapper.readValue(
+                    responseBody,
+                    mapper.getTypeFactory().constructCollectionType(List.class, type)
+            );
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
 
         return list;
