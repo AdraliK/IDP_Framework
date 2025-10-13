@@ -14,6 +14,7 @@ import ru.pflb.framework.utils.DataKeys;
 import ru.pflb.framework.utils.DataStorage;
 import ru.pflb.framework.utils.JsonUtils;
 import ru.pflb.framework.utils.Operator;
+import ru.pflb.tests.hooks.BeforeTestApiHooks;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -24,7 +25,7 @@ import static ru.pflb.framework.steps.api.technical.ApiSteps.*;
 @Feature("Работа с пользователями")
 @Tag("api")
 @Tag("user")
-public class UserTests extends AuthTests {
+public class UserTests extends BeforeTestApiHooks {
 
     @Test
     @Tag("smoke")
@@ -150,14 +151,18 @@ public class UserTests extends AuthTests {
     }
 
     @AfterEach
-    void cleanAuthToken() {
+    void cleanAuthToken(TestInfo info) {
+        if (info.getTags().contains("cleanUserData")) {
+            cleanUserData();
+        }
+        if (info.getTags().contains("cleanCarData")) {
+            cleanCarData();
+        }
+
         DataStorage.remove(DataKeys.AUTH_TOKEN);
     }
 
-    @AfterEach
-    void cleanUserData(TestInfo info) {
-        if (!info.getTags().contains("cleanUserData")) return;
-
+    private void cleanUserData() {
         Allure.step("Очистка данных пользователя после теста", () -> {
             String authToken = DataStorage.get(DataKeys.AUTH_TOKEN);
 
@@ -173,10 +178,7 @@ public class UserTests extends AuthTests {
         });
     }
 
-    @AfterEach
-    void cleanCarData(TestInfo info) {
-        if (!info.getTags().contains("cleanCarData")) return;
-
+    private void cleanCarData() {
         Allure.step("Очистка данных автомобиля после теста", () -> {
             String authToken = DataStorage.get(DataKeys.AUTH_TOKEN);
             String carId = DataStorage.get(DataKeys.CAR_ID);

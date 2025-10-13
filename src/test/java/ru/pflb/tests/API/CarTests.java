@@ -13,6 +13,7 @@ import ru.pflb.framework.dto.Car;
 import ru.pflb.framework.steps.api.business.CarBusinessApiSteps;
 import ru.pflb.framework.utils.JsonUtils;
 import ru.pflb.framework.utils.Operator;
+import ru.pflb.tests.hooks.BeforeTestApiHooks;
 
 import static ru.pflb.framework.steps.api.technical.ApiSteps.*;
 
@@ -20,7 +21,7 @@ import static ru.pflb.framework.steps.api.technical.ApiSteps.*;
 @Feature("Работа с автомобилями")
 @Tag("api")
 @Tag("car")
-public class CarTests extends AuthTests {
+public class CarTests extends BeforeTestApiHooks {
 
     @Test
     @Tag("smoke")

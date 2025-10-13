@@ -1,7 +1,6 @@
 package ru.pflb.framework.steps.api.technical;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
@@ -13,10 +12,8 @@ import ru.pflb.framework.client.AuthApiClient;
 import ru.pflb.framework.client.AuthorizedApiClient;
 import ru.pflb.framework.utils.*;
 
-import java.nio.file.Files;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -37,7 +34,7 @@ public class ApiSteps {
         }
     }
 
-    @Step("Производится авторизация пользователя {user}")
+    @Step("Производим авторизацию под пользователем {user}")
     public static String login(String user) {
         String username = Config.getProperty(user + ".username");
         String password = Config.getProperty(user + ".password");
@@ -46,13 +43,13 @@ public class ApiSteps {
         return authClient.login(username, password);
     }
 
-    @Step("Производится авторизация по логину {username}")
+    @Step("Производим авторизацию под по логину {username}")
     public static String login(String username, String password) {
         AuthApiClient authClient = new AuthApiClient();
         return authClient.login(username, password);
     }
 
-    @Step("Производится неуспешная авторизация по логину {username}")
+    @Step("Производим неуспешную авторизацию по логину {username}")
     public static String unSuccessLogin(String username, String password) {
         AuthApiClient authClient = new AuthApiClient();
         return authClient.login(username, password);

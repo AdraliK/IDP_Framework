@@ -6,9 +6,9 @@ import org.junit.jupiter.api.TestInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BaseTests {
+public class BaseApiTests {
 
-    protected static final Logger log = LoggerFactory.getLogger(BaseTests.class);
+    protected static final Logger log = LoggerFactory.getLogger(BaseApiTests.class);
 
     @BeforeEach
     void beforeEach(TestInfo info) {
