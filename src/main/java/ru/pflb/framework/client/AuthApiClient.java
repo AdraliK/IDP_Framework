@@ -1,6 +1,7 @@
 package ru.pflb.framework.client;
 
 import io.restassured.http.Method;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import ru.pflb.framework.dto.LoginRequestJson;
@@ -22,7 +23,9 @@ public class AuthApiClient extends BaseApiClient {
         LoginRequestJson loginRequestJson = new LoginRequestJson(username, password);
         Response response = sendRequest(Method.POST, "/login", loginRequestJson);
         if (response.statusCode() == 202) {
-            return response.jsonPath().getString("access_token");
+            synchronized(JsonPath.class) {
+                return response.jsonPath().getString("access_token");
+            }
         } else {
             log.error("Ошибка при авторизации!");
             return null;
