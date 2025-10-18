@@ -25,7 +25,7 @@ public class ElementUtils {
         } catch (Exception _) {
         }
 
-        return "Неизвестный элемент";
+        return element.toString();
     }
 
     private static boolean isSameElement(SelenideElement firstElement, SelenideElement secondElement) {

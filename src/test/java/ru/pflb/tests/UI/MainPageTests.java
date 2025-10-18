@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import ru.pflb.framework.pages.BasketPage;
 import ru.pflb.framework.pages.CitilnkMainPage;
 
 
@@ -16,14 +17,13 @@ import ru.pflb.framework.pages.CitilnkMainPage;
 @Feature("Главная страница")
 @Severity(SeverityLevel.CRITICAL)
 @Tag("ui")
-public class MainPageTests extends BaseUiTest {
+public class MainPageTests extends BaseUiTests {
 
     @Test
     @Tag("smoke")
     @DisplayName("Провекрка корректного захода на страницу")
     void openMainPageTest() {
         CitilnkMainPage mainPage = new CitilnkMainPage();
-        mainPage.checkTitleName("Ситилинк – интернет-магазин техники, электроники, товаров для дома и ремонта");
     }
 
     @Test

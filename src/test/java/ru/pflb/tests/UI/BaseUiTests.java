@@ -5,7 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import ru.pflb.framework.core.DriverManager;
 
-public class BaseUiTest {
+public class BaseUiTests {
 
     @BeforeAll
     static void option() {

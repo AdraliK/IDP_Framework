@@ -2,20 +2,20 @@ package ru.pflb.framework.pages;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import ru.pflb.framework.annotations.ElementName;
+import ru.pflb.framework.steps.api.technical.ApiSteps;
 import ru.pflb.framework.utils.Config;
+import ru.pflb.framework.utils.Operator;
 
 import static com.codeborne.selenide.Selenide.$x;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 
 public class CitilnkMainPage extends BasePage {
 
 
     public CitilnkMainPage() {
         openPage(Config.getProperty("citilink.url"));
+        checkTitleName("Ситилинк – интернет-магазин техники, электроники, товаров для дома и ремонта");
     }
 
     @ElementName("Поле ввода поиска")
@@ -63,18 +63,14 @@ public class CitilnkMainPage extends BasePage {
                 .hover()
                 .$x(".//button[@data-meta-name='Snippet__cart-button']")
                 .click();
-        waitSeconds(3);
+        waitSeconds(5);
         clickByElement(exitButtonWindow);
     }
 
     @Step("Счётчик кол-во добавленных товаров в корзину равен {expectedValue}")
     public void checkValueInNotificationCounter(int expectedValue) {
-        String valueText = notificationCounter.getAttribute("data-meta-value"); //вынести проверку в UiSteps
+        String valueText = notificationCounter.getAttribute("data-meta-value");
         int actualValue = Integer.parseInt(valueText != null ? valueText : "-1");
-        assertThat(
-                "Ожидалось, что %s будет равен %s".formatted(actualValue, expectedValue),
-                actualValue,
-                equalTo(expectedValue)
-        );
+        ApiSteps.checkComparison(actualValue, expectedValue, Operator.EQUALS);
     }
 }

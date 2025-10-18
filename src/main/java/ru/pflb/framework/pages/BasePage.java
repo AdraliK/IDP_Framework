@@ -37,14 +37,16 @@ public abstract class BasePage {
 
     public void clickByElement(SelenideElement element) {
         String elementName = ElementUtils.getElementName(this, element);
-        Allure.step("Клик на элемент ".concat(elementName), () -> {});
-        element.shouldBe(visible).click();
+        Allure.step("Клик на элемент ".concat(elementName), () -> {
+            element.shouldBe(visible).click();
+        });
     }
 
     public void elementIsVisible(SelenideElement element) {
         String elementName = ElementUtils.getElementName(this, element);
-        Allure.step("На странице отображается элемент ".concat(elementName), () -> {});
-        element.shouldBe(visible);
+        Allure.step("На странице отображается элемент ".concat(elementName), () -> {
+            element.shouldBe(visible);
+        });
     }
 
     @Step("Страница содержит элемент с текстом: {text}")
