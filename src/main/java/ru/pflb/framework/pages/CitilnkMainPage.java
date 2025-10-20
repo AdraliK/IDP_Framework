@@ -4,14 +4,18 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 import ru.pflb.framework.annotations.ElementName;
+import ru.pflb.framework.dto.ui.ProductData;
 import ru.pflb.framework.steps.api.technical.ApiSteps;
 import ru.pflb.framework.utils.Config;
 import ru.pflb.framework.utils.Operator;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.codeborne.selenide.Selenide.$$x;
 import static com.codeborne.selenide.Selenide.$x;
 
 public class CitilnkMainPage extends BasePage {
-
 
     public CitilnkMainPage() {
         openPage(Config.getProperty("citilink.url"));
@@ -35,42 +39,62 @@ public class CitilnkMainPage extends BasePage {
             $x("//div[@data-meta-name='NotificationCounter']");
 
     @ElementName("Крестик всплывающего окна")
-    public final SelenideElement exitButtonWindow = $x("//button[contains(@class, 'Button-Close')]");
+    public final SelenideElement closeWindowButton =
+            $x("//div[@data-meta-name='UpsaleBasketLayout']//button[contains(@data-meta-name,'close-popup')]");
 
-    public final SelenideElement bestProductsComponent =
-            $x("//h3[text()='Лучшие предложения']/ancestor::section");
+    private final String bestProductsComponentPath = "//h3[text()='Лучшие предложения']/ancestor::section";
 
-    public final ElementsCollection listOfBestProducts =
-            bestProductsComponent.$$x(".//div[@data-meta-name='ProductsCompilation__slide']");
+    private final String productsPath = bestProductsComponentPath
+            + "//div[@data-meta-name='ProductsCompilation__slide'][.//span[@data-meta-price]]";
 
-    @Step("Получено наименование товара из списка 'Лучшие предложения' под номером {index}")
-    public String getNameOfBestProduct(int index) {
-        SelenideElement nameElement = listOfBestProducts.get(index).$x(".//div[@data-meta-product-id]/a[@title]");
-        return getAttributeValue(nameElement, "title");
-    }
+    @ElementName("Товары")
+    public final ElementsCollection products = $$x(productsPath);
 
-    @Step("Получена цена товара из списка 'Лучшие предложения' под номером {index}")
-    public Integer getPriceOfBestProduct(int index) {
-        SelenideElement priceElement = listOfBestProducts.get(index).$x(".//span[@data-meta-price]");
-        String priceText = getAttributeValue(priceElement, "data-meta-price");
-        return Integer.parseInt(priceText);
-    }
+    public final String productPricesPath = ".//span[@data-meta-price]";
+
+    public final String productNamesPath = ".//a[@title]";
 
     @Step("Добавлен в корзину товар из списка 'Лучшие предложения' под номером {index}")
     public void addItemOfBestProductInBasket(int index) {
-        listOfBestProducts.get(index)
+        products.get(index)
                 .scrollTo()
                 .hover()
                 .$x(".//button[@data-meta-name='Snippet__cart-button']")
                 .click();
         waitSeconds(5);
-        clickByElement(exitButtonWindow);
+        clickByElement(closeWindowButton);
     }
 
     @Step("Счётчик кол-во добавленных товаров в корзину равен {expectedValue}")
     public void checkValueInNotificationCounter(int expectedValue) {
         String valueText = notificationCounter.getAttribute("data-meta-value");
         int actualValue = Integer.parseInt(valueText != null ? valueText : "-1");
-        ApiSteps.checkComparison(actualValue, expectedValue, Operator.EQUALS);
+        ApiSteps.checkComparison(actualValue, expectedValue, Operator.EQUALS); //подумать
+    }
+
+    @Step("Добавлено {count} товаров в корзину")
+    public void addProductsInBasket(int count) {
+        for (int i = 0; i < count; i++) {
+            addItemOfBestProductInBasket(i);
+        }
+    }
+
+    @Step("Добавлено {count} товаров в корзину с сохранением данных")
+    public List<ProductData> addProductsInBasketAndGetData(int count) {
+        List<ProductData> productDataList = new ArrayList<>();
+
+        for (int i = 0; i < count; i++) {
+            addItemOfBestProductInBasket(i);
+
+            SelenideElement elementPrice = products.get(i).$x(productPricesPath);
+            String price = getAttributeValueStep(elementPrice, "data-meta-price", "Цена товара");
+
+            SelenideElement elementName = products.get(i).$x(productNamesPath);
+            String name = getAttributeValueStep(elementName, "title", "Наименование товара");
+
+            productDataList.add(new ProductData(name, price));
+        }
+
+        return productDataList;
     }
 }
