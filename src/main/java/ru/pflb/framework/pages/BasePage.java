@@ -41,6 +41,11 @@ public abstract class BasePage {
         $x(String.format("//*[text()='%s']", text)).click();
     }
 
+    @Step("Нажимаю Enter")
+    public void pressEnter(SelenideElement element) {
+        element.shouldBe(visible).pressEnter();
+    }
+
     public void clickByElement(SelenideElement element) {
         String elementName = ElementUtils.getElementName(this, element);
         Allure.step("Клик на элемент ".concat(elementName), () -> {
