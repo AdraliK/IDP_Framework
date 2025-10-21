@@ -1,4 +1,4 @@
-package ru.pflb.framework.utils;
+package ru.pflb.framework.utils.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class Config {
+public class CustomConfigManager {
 
-    private static final Logger log = LoggerFactory.getLogger(Config.class);
+    private static final Logger log = LoggerFactory.getLogger(ConfigManager.class);
 
     private static final Properties props = new Properties();
     private static final String[] files = {
@@ -20,7 +20,7 @@ public class Config {
     static {
         try {
             for (String file : files) {
-                try (InputStream is = Config.class.getClassLoader().getResourceAsStream(file)) {
+                try (InputStream is = ConfigManager.class.getClassLoader().getResourceAsStream(file)) {
                     if (is != null) {
                         props.load(is);
                     }
@@ -40,3 +40,4 @@ public class Config {
         return value;
     }
 }
+

@@ -4,13 +4,13 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.specification.RequestSpecification;
-import ru.pflb.framework.utils.Config;
+import ru.pflb.framework.utils.config.ConfigManager;
 
 public class RequestSpecs {
 
     public static RequestSpecification requestBaseSpec() {
         return new RequestSpecBuilder()
-                .setBaseUri(Config.getProperty("base.url"))
+                .setBaseUri(ConfigManager.get().baseUrl())
                 .setContentType("application/json")
                 .addFilter(new RequestLoggingFilter())
                 .addFilter(new ResponseLoggingFilter())

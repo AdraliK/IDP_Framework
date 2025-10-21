@@ -6,8 +6,8 @@ import io.qameta.allure.Step;
 import ru.pflb.framework.annotations.ElementName;
 import ru.pflb.framework.dto.ui.ProductData;
 import ru.pflb.framework.steps.api.technical.ApiSteps;
-import ru.pflb.framework.utils.Config;
 import ru.pflb.framework.utils.Operator;
+import ru.pflb.framework.utils.config.ConfigManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ import static com.codeborne.selenide.Selenide.$x;
 public class CitilnkMainPage extends BasePage {
 
     public CitilnkMainPage() {
-        openPage(Config.getProperty("citilink.url"));
+        openPage(ConfigManager.get().citilinkUrl());
         checkTitleName("Ситилинк – интернет-магазин техники, электроники, товаров для дома и ремонта");
     }
 

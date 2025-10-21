@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import ru.pflb.framework.dto.ui.ProductData;
 import ru.pflb.framework.pages.BasketPage;
 import ru.pflb.framework.pages.CitilnkMainPage;
-import ru.pflb.framework.utils.Config;
+import ru.pflb.framework.utils.config.ConfigManager;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class BasketPageTests extends BaseUiTests{
     @Tag("smoke")
     @DisplayName("Провекрка отображения основных элементов страницы с пустой корзиной")
     void emptyBasketPageElementsVisibilityTest() {
-        open(Config.getProperty("citilink.url") + "/order/");
+        open(ConfigManager.get().citilinkUrl() + "/order/");
         BasketPage basketPage = new BasketPage();
         basketPage.elementIsVisible(basketPage.backToShopButton);
         basketPage.elementIsVisibleWithText("В корзине нет товаров");

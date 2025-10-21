@@ -23,7 +23,10 @@
         <jsoup.version>1.16.1</jsoup.version>
         <hamcrest.version>2.2</hamcrest.version>
         <slf4j.version>2.0.9</slf4j.version>
+        <logback.version>1.4.11</logback.version>
         <lombok.version>1.18.30</lombok.version>
+        <selenide.version>7.7.1</selenide.version>
+        <aeonbits.version>1.0.12</aeonbits.version>
     </properties>
 
     <dependencyManagement>
@@ -98,7 +101,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.4.11</version>
+            <version>${logback.version}</version>
         </dependency>
 
         <dependency>
@@ -112,7 +115,7 @@
         <dependency>
             <groupId>com.codeborne</groupId>
             <artifactId>selenide</artifactId>
-            <version>7.7.1</version>
+            <version>${selenide.version}</version>
         </dependency>
 
         <!-- Allure + Selenide интеграция -->
@@ -120,6 +123,13 @@
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-selenide</artifactId>
             <version>${allure.version}</version>
+        </dependency>
+
+        <!-- Property -->
+        <dependency>
+            <groupId>org.aeonbits.owner</groupId>
+            <artifactId>owner</artifactId>
+            <version>${aeonbits.version}</version>
         </dependency>
     </dependencies>
 

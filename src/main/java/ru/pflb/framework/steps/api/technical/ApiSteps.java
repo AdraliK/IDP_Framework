@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import ru.pflb.framework.client.AuthApiClient;
 import ru.pflb.framework.client.AuthorizedApiClient;
 import ru.pflb.framework.utils.*;
+import ru.pflb.framework.utils.config.ConfigManager;
+import ru.pflb.framework.utils.config.CustomConfigManager;
 
 import java.util.Collections;
 import java.util.List;
@@ -36,8 +38,8 @@ public class ApiSteps {
 
     @Step("Производим авторизацию под пользователем {user}")
     public static String login(String user) {
-        String username = Config.getProperty(user + ".username");
-        String password = Config.getProperty(user + ".password");
+        String username = CustomConfigManager.getProperty(user + ".username");
+        String password = CustomConfigManager.getProperty(user + ".password");
 
         AuthApiClient authClient = new AuthApiClient();
         return authClient.login(username, password);
