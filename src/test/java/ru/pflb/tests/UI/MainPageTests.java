@@ -12,6 +12,7 @@ import ru.pflb.framework.pages.CitilnkMainPage;
 
 
 @Feature("Главная страница")
+@Tag("mainPage")
 @Severity(SeverityLevel.CRITICAL)
 public class MainPageTests extends BaseUiTests {
 

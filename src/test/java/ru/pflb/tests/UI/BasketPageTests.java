@@ -16,6 +16,7 @@ import java.util.List;
 import static com.codeborne.selenide.Selenide.open;
 
 @Feature("Корзина пользователя")
+@Tag("basketPage")
 public class BasketPageTests extends BaseUiTests{
 
     @Test

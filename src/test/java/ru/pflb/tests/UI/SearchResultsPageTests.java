@@ -12,6 +12,7 @@ import ru.pflb.framework.steps.api.technical.ApiSteps;
 import java.util.List;
 
 @Feature("Поиск товаров")
+@Tag("searchResult")
 public class SearchResultsPageTests extends BaseUiTests {
 
     @Tag("smoke")
