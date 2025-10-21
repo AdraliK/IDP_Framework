@@ -1,4 +1,4 @@
-package ru.pflb.framework.dto;
+package ru.pflb.framework.dto.api;
 
 import lombok.Data;
 

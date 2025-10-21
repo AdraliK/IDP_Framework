@@ -3,9 +3,8 @@ package ru.pflb.framework.steps.api.business;
 import io.qameta.allure.Step;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.Assertions;
-import ru.pflb.framework.dto.Car;
-import ru.pflb.framework.dto.User;
+import ru.pflb.framework.dto.api.Car;
+import ru.pflb.framework.dto.api.User;
 
 import java.math.BigDecimal;
 import java.util.List;

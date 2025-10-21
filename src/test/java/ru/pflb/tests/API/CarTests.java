@@ -9,7 +9,7 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import ru.pflb.framework.dto.Car;
+import ru.pflb.framework.dto.api.Car;
 import ru.pflb.framework.steps.api.business.CarBusinessApiSteps;
 import ru.pflb.framework.utils.JsonUtils;
 import ru.pflb.framework.utils.Operator;

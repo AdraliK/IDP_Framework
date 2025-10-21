@@ -6,8 +6,8 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import ru.pflb.framework.dto.Car;
-import ru.pflb.framework.dto.User;
+import ru.pflb.framework.dto.api.Car;
+import ru.pflb.framework.dto.api.User;
 import ru.pflb.framework.steps.api.business.CarBusinessApiSteps;
 import ru.pflb.framework.steps.api.business.UserBusinessApiSteps;
 import ru.pflb.framework.utils.DataKeys;
@@ -55,7 +55,7 @@ public class UserTests extends BeforeTestApiHooks {
 
     @Test
     @DisplayName("Провекрка попытки добавления невалидного пользователя")
-    void addUserWithInvalidData() {
+    void addUserWithInvalidDataTest() {
         String userRequest = JsonUtils.getJsonString("users/invalidUser.json");
         Response response = sendRequest(
                 Method.POST,

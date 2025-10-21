@@ -3,7 +3,7 @@ package ru.pflb.framework.steps.api.business;
 import io.qameta.allure.Step;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
-import ru.pflb.framework.dto.Car;
+import ru.pflb.framework.dto.api.Car;
 
 import static ru.pflb.framework.steps.api.technical.ApiSteps.*;
 import static ru.pflb.framework.steps.api.technical.ApiSteps.checkResponseStatusCode;

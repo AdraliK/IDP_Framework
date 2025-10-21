@@ -4,7 +4,7 @@ import io.restassured.http.Method;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import ru.pflb.framework.dto.LoginRequestJson;
+import ru.pflb.framework.dto.api.LoginRequestJson;
 
 import static ru.pflb.framework.specification.RequestSpecs.requestBaseSpec;
 
