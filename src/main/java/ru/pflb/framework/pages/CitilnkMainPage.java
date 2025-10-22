@@ -12,6 +12,7 @@ import ru.pflb.framework.utils.config.ConfigManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$$x;
 import static com.codeborne.selenide.Selenide.$x;
 
@@ -62,7 +63,9 @@ public class CitilnkMainPage extends BasePage {
                 .$x(".//button[@data-meta-name='Snippet__cart-button']")
                 .click();
         waitSeconds(5);
-        clickByElement(closeWindowButton);
+        if (closeWindowButton.exists() && closeWindowButton.is(visible)) {
+            clickByElement(closeWindowButton);
+        }
     }
 
     @Step("Счётчик кол-во добавленных товаров в корзину равен {expectedValue}")
