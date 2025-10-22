@@ -1,5 +1,6 @@
 package ru.pflb.framework.specification;
 
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
@@ -14,6 +15,7 @@ public class RequestSpecs {
                 .setContentType("application/json")
                 .addFilter(new RequestLoggingFilter())
                 .addFilter(new ResponseLoggingFilter())
+                .addFilter(new AllureRestAssured())
                 .build();
     }
 

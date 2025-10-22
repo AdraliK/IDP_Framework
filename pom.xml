@@ -56,6 +56,13 @@
             <version>${rest.assured.version}</version>
         </dependency>
 
+        <!-- Allure Rest-Assured -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-rest-assured</artifactId>
+            <version>${allure.version}</version>
+        </dependency>
+
         <!-- Allure -->
         <dependency>
             <groupId>io.qameta.allure</groupId>
@@ -111,14 +118,14 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Selenide для UI тестов -->
+        <!-- Selenide -->
         <dependency>
             <groupId>com.codeborne</groupId>
             <artifactId>selenide</artifactId>
             <version>${selenide.version}</version>
         </dependency>
 
-        <!-- Allure + Selenide интеграция -->
+        <!-- Allure-Selenide -->
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-selenide</artifactId>

@@ -25,18 +25,7 @@ public class ApiSteps {
 
     private static final Logger log = LoggerFactory.getLogger(ApiSteps.class);
 
-    private static void logRequestBody(Object body) {
-        if (body != null) {
-            Allure.addAttachment("Request body", "application/json", body.toString());
-        }
-    }
-    private static void logResponseBody(String body) {
-        if (body != null) {
-            Allure.addAttachment("Response body", "application/json", body);
-        }
-    }
-
-    @Step("Производим авторизацию под пользователем {user}")
+    @Step("Авторизуемся под пользователем {user}")
     public static String login(String user) {
         String username = CustomConfigManager.getProperty(user + ".username");
         String password = CustomConfigManager.getProperty(user + ".password");
@@ -45,7 +34,7 @@ public class ApiSteps {
         return authClient.login(username, password);
     }
 
-    @Step("Производим авторизацию под по логину {username}")
+    @Step("Авторизуемся по логину {username}")
     public static String login(String username, String password) {
         AuthApiClient authClient = new AuthApiClient();
         return authClient.login(username, password);
@@ -59,11 +48,8 @@ public class ApiSteps {
 
     @Step("Выполнен {method} запрос на endpoint '{endpoint}' с токеном авторизаци")
     public static Response sendRequest(Method method, String endpoint, Object body) {
-        logRequestBody(body);
         AuthorizedApiClient apiClient = new AuthorizedApiClient(DataStorage.get(DataKeys.AUTH_TOKEN));
-        Response response = apiClient.sendRequest(method, endpoint, body);
-        logResponseBody(response.getBody().asString());
-        return response;
+        return apiClient.sendRequest(method, endpoint, body);
     }
 
     @Step("Статус-код ответа равен '{statusCode}'")
@@ -73,7 +59,6 @@ public class ApiSteps {
 
     @Step("Из тела ответа получено значение по JsonPath '{jsonPath}'")
     public static Object getJsonPathValue(Response response, String jsonPath) {
-        logResponseBody(response.getBody().asString());
         Object value = response.jsonPath().get(jsonPath);
         log.info("По JsonPath = '{}' получено значение: {}", jsonPath, value);
         return value;
@@ -82,7 +67,6 @@ public class ApiSteps {
     @Step("Из тела ответа получен список по JsonPath '{jsonPath}'")
     public static <T> List<T> getJsonPathListFromResponse(Response response, String jsonPath, Class<T> type) {
         String responseBody = response.getBody().asString();
-        logResponseBody(responseBody);
 
         if (responseBody == null || responseBody.isBlank() || responseBody.equals("[]")) {
             log.warn("Ответ пустой или содержит пустой массив");
@@ -111,7 +95,6 @@ public class ApiSteps {
         Allure.step("Из тела ответа получен список элементов '%s'".formatted(objectName), () -> {});
 
         String responseBody = response.getBody().asString();
-        logResponseBody(responseBody);
 
         ObjectMapper mapper = new ObjectMapper();
         List<T> list;
@@ -183,7 +166,6 @@ public class ApiSteps {
     public static <T> void checkResponseMatchesDto(Response response, Class<T> dtoClass) {
         String dtoName = dtoClass.getSimpleName();
         Allure.step("Тело ответа соответствует DTO '%s'".formatted(dtoName), () -> {
-            logResponseBody(response.getBody().asString());
             T obj = response.as(dtoClass);
             assertNotNull(obj, "Не удалось десериализовать ответ в %s. Тело ответа: \n %s"
                     .formatted(dtoName, response.getBody()));
