@@ -87,27 +87,27 @@ mvn test
 ```
 **Запуск конкретного класса**
 ```bash
-mvn test -Dtest=UserTests
+mvn test "-Dtest=UserTests"
 ```
 **Запуск всех тестов из пакета или директории**
 ```bash
-mvn test -Dtest=ru.pflb.tests.api.**.*Test
+mvn test "-Dtest=ru.pflb.tests.api.**.*Test"
 ```
 ### Запуск по тегам (JUnit 5)
 
 **Включение тегов:**
 ```bash
-mvn test -Djunit.jupiter.includeTags=api,smoke
+mvn test "-Djunit.jupiter.includeTags=api,smoke"
 ```
 
 **Исключение тегов:**
 ```bash
-mvn test -Djunit.jupiter.excludeTags=ui,slow
+mvn test "-Djunit.jupiter.excludeTags=ui,slow"
 ```
 
 **Комбинация include + exclude:**
 ```bash
-mvn test -Djunit.jupiter.includeTags=api,smoke -Djunit.jupiter.excludeTags=slow
+mvn test "-Djunit.jupiter.includeTags=api,smoke" "-Djunit.jupiter.excludeTags=slow"
 ```
 **Формирование Allure отчета**
 ```bash
@@ -118,5 +118,5 @@ mvn allure:serve
 Для параллельного запуска стоит обратить внимание на файл `src/test/resources/junit-platform.properties`.
 * Параметр `junit.jupiter.execution.parallel.enabled` отвечает за ВКЛ/ВЫКЛ параллельного запуска (по умолчанию стоит значение `false`)
 * Параметр `junit.jupiter.execution.parallel.config.strategy` позволяет выбрать стратегию параллельного выполнения тестов:
-* * `dynamic` для использования всего ЦП
-* * `fixed` для фиксированного значения потоков (кол-во потоков узаывается в поле `junit.jupiter.execution.parallel.config.fixed.parallelism`)
+  * `dynamic` для использования всего ЦП
+  * `fixed` для фиксированного значения потоков (кол-во потоков узаывается в поле `junit.jupiter.execution.parallel.config.fixed.parallelism`)
