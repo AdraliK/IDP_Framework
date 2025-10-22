@@ -1,4 +1,4 @@
-package ru.pflb.tests.UI;
+package ru.pflb.tests.ui;
 
 import io.qameta.allure.Feature;
 import org.junit.jupiter.api.DisplayName;

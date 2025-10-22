@@ -1,4 +1,4 @@
-package ru.pflb.tests.UI;
+package ru.pflb.tests.ui;
 
 import io.qameta.allure.Feature;
 import org.junit.jupiter.api.DisplayName;
@@ -7,7 +7,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import ru.pflb.framework.pages.CitilnkMainPage;
 import ru.pflb.framework.pages.SearchResultsPage;
-import ru.pflb.framework.steps.api.technical.ApiSteps;
 
 import java.util.List;
 

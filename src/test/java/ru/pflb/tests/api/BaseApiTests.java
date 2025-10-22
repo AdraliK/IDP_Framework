@@ -1,11 +1,15 @@
-package ru.pflb.tests.API;
+package ru.pflb.tests.api;
 
+import io.qameta.allure.Epic;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.TestInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Epic("API тесты")
+@Tag("api")
 public class BaseApiTests {
 
     protected static final Logger log = LoggerFactory.getLogger(BaseApiTests.class);

@@ -1,4 +1,4 @@
-package ru.pflb.tests.API;
+package ru.pflb.tests.api;
 
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
@@ -15,10 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static ru.pflb.framework.steps.api.technical.ApiSteps.login;
 import static ru.pflb.framework.steps.api.technical.ApiSteps.unSuccessLogin;
 
-@Epic("API тесты")
 @Feature("Авторизация")
 @Severity(SeverityLevel.CRITICAL)
-@Tag("api")
 @Tag("auth")
 @Tag("smoke")
 public class AuthTests extends BaseApiTests {

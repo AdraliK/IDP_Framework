@@ -1,4 +1,4 @@
-package ru.pflb.tests.API;
+package ru.pflb.tests.api;
 
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
@@ -17,9 +17,7 @@ import ru.pflb.tests.hooks.BeforeTestApiHooks;
 
 import static ru.pflb.framework.steps.api.technical.ApiSteps.*;
 
-@Epic("API тесты")
 @Feature("Работа с автомобилями")
-@Tag("api")
 @Tag("car")
 public class CarTests extends BeforeTestApiHooks {
 

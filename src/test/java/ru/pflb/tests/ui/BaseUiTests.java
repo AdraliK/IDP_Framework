@@ -1,4 +1,4 @@
-package ru.pflb.tests.UI;
+package ru.pflb.tests.ui;
 
 import com.codeborne.selenide.Selenide;
 import io.qameta.allure.Epic;

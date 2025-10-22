@@ -1,4 +1,4 @@
-package ru.pflb.tests.API;
+package ru.pflb.tests.api;
 
 import io.qameta.allure.*;
 import io.restassured.http.Method;
@@ -21,9 +21,7 @@ import java.util.List;
 
 import static ru.pflb.framework.steps.api.technical.ApiSteps.*;
 
-@Epic("API тесты")
 @Feature("Работа с пользователями")
-@Tag("api")
 @Tag("user")
 public class UserTests extends BeforeTestApiHooks {
 
