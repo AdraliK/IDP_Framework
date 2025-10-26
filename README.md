@@ -87,28 +87,24 @@ mvn test
 ```
 **Запуск конкретного класса**
 ```bash
-mvn test "-Dtest=UserTests"
+mvn test -Dtest=UserTests
 ```
 **Запуск всех тестов из пакета или директории**
 ```bash
-mvn test "-Dtest=ru.pflb.tests.api.**.*Test"
+mvn test -Dtest="ru.pflb.tests.api.**"
 ```
 ### Запуск по тегам (JUnit 5)
 
 **Включение тегов:**
 ```bash
-mvn test "-Djunit.jupiter.includeTags=api,smoke"
+mvn test -Dgroups="smoke"
 ```
 
 **Исключение тегов:**
 ```bash
-mvn test "-Djunit.jupiter.excludeTags=ui,slow"
+mvn test -DexcludedGroups="ui"
 ```
 
-**Комбинация include + exclude:**
-```bash
-mvn test "-Djunit.jupiter.includeTags=api,smoke" "-Djunit.jupiter.excludeTags=slow"
-```
 **Формирование Allure отчета**
 ```bash
 mvn allure:serve
