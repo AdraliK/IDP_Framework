@@ -1,0 +1,62 @@
+name: Run tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 22
+
+      - name: Build framework
+        run: mvn clean install -pl framework -am -DskipTests -B
+
+      - name: Run API Tests
+        run: mvn test -pl api-tests -B 
+          "-Dtest.username=${{ secrets.TEST_USERNAME }}" 
+          "-Dtest.password=${{ secrets.TEST_PASSWORD }}" 
+          "-Dfile.encoding=UTF-8"
+        continue-on-error: true
+
+      - name: Run UI Tests
+        run: mvn test -pl ui-tests -B 
+          "-Dfile.encoding=UTF-8"
+        continue-on-error: true
+
+      - name: Prepare Allure Results
+        run: |
+          mkdir -p allure-results
+          cp -r api-tests/target/allure-results/* allure-results/ 2>/dev/null || true
+          cp -r ui-tests/target/allure-results/* allure-results/ 2>/dev/null || true
+
+      - name: Load test report history
+        uses: actions/checkout@v4
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Build test report
+        uses: simple-elf/allure-report-action@v1.7
+        if: always()
+        with:
+          gh_pages: gh-pages
+          allure_history: allure-history
+          allure_results: allure-results
+
+      - name: Publish test report
+        uses: peaceiris/actions-gh-pages@v3
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history

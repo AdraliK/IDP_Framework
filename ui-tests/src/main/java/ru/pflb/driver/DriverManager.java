@@ -24,12 +24,14 @@ public class DriverManager {
         Configuration.screenshots = true;
         Configuration.savePageSource = true;
         Configuration.reportsFolder = "build/allure-results";
-        Configuration.headless = false;
-        Configuration.browserSize = null;
+        Configuration.browserSize = "1920x1080";
+        Configuration.headless = true;
 
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--incognito");
-        options.addArguments("--start-maximized");
+        options.addArguments("--window-size=1920,1080");
+        options.addArguments("--disable-gpu");
+        options.addArguments("--no-sandbox");
         options.addArguments("--disable-notifications");
         options.addArguments("--remote-allow-origins=*");
 

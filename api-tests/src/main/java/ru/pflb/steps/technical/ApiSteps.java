@@ -29,11 +29,27 @@ public class ApiSteps {
 
     @Step("Авторизуемся под пользователем {user}")
     public static String login(String user) {
-        String username = CustomConfigManager.getProperty(user + ".username");
-        String password = CustomConfigManager.getProperty(user + ".password");
+        String username = getUserName(user);
+        String password = getPassword(user);
 
         AuthApiClient authClient = new AuthApiClient();
         return authClient.login(username, password);
+    }
+
+    private static String getUserName(String user) {
+        String username = System.getProperty("test.username");
+        if (username == null || username.isEmpty()) {
+            return CustomConfigManager.getProperty(user + ".username");
+        }
+        return username;
+    }
+
+    private static String getPassword(String user) {
+        String password = System.getProperty("test.password");
+        if (password == null || password.isEmpty()) {
+            return CustomConfigManager.getProperty(user + ".password");
+        }
+        return password;
     }
 
     @Step("Авторизуемся по логину {username}")
