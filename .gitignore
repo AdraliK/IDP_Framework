@@ -39,4 +39,4 @@ build/
 .DS_Store
 
 ### Resources ###
-src/main/resources/secrets.properties
+framework/src/main/resources/secrets.properties
