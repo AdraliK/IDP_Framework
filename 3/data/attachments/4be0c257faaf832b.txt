@@ -1,0 +1,8 @@
+{
+  "age" : 24,
+  "firstName" : "Дмитрий",
+  "id" : 12119,
+  "money" : 100.00,
+  "secondName" : "Дрёмов",
+  "sex" : "MALE"
+}
