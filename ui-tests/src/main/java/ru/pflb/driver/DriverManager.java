@@ -14,10 +14,6 @@ public class DriverManager {
     }
 
     public static void initOptions() {
-        String driverPath = new File("src/main/resources/drivers/chromedriver.exe")
-                .getAbsolutePath();
-        System.setProperty("webdriver.chrome.driver", driverPath);
-
         Configuration.browser = "chrome";
         Configuration.timeout = 10000;
         Configuration.pageLoadStrategy = "none";
@@ -33,6 +29,7 @@ public class DriverManager {
         options.addArguments("--disable-gpu");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-notifications");
+        options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--remote-allow-origins=*");
 
         Configuration.browserCapabilities = options;
