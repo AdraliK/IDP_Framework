@@ -17,15 +17,16 @@ public class DriverManager {
         SelenideLogger.addListener("AllureSelenide",
                 new AllureSelenide()
                         .screenshots(true)
-                        .savePageSource(true)
+                        .savePageSource(false)
                         .includeSelenideSteps(true)
         );
 
         Configuration.browser = "chrome";
-        Configuration.timeout = 10000;
-        Configuration.pageLoadStrategy = "none";
+        Configuration.timeout = 30000;
+        Configuration.pageLoadTimeout = 45000;
+        Configuration.pageLoadStrategy = "eager";
         Configuration.screenshots = true;
-        Configuration.savePageSource = true;
+        Configuration.savePageSource = false;
         Configuration.reportsFolder = "build/allure-results";
         Configuration.browserSize = "1920x1080";
         Configuration.headless = true;

@@ -5,16 +5,16 @@ import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 import ru.pflb.annotations.ElementName;
 import ru.pflb.dto.ProductData;
-import ru.pflb.utils.Operator;
 import ru.pflb.utils.config.ConfigManager;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$$x;
 import static com.codeborne.selenide.Selenide.$x;
-import static ru.pflb.steps.CommonSteps.checkComparison;
 
 public class CitilnkMainPage extends BasePage {
 
@@ -62,17 +62,14 @@ public class CitilnkMainPage extends BasePage {
                 .hover()
                 .$x(".//button[@data-meta-name='Snippet__cart-button']")
                 .click();
-        waitSeconds(5);
-        if (closeWindowButton.exists() && closeWindowButton.is(visible)) {
-            clickByElement(closeWindowButton);
+        if (closeWindowButton.is(visible, Duration.ofSeconds(15))) {
+            closeWindowButton.click();
         }
     }
 
     @Step("Счётчик кол-во добавленных товаров в корзину равен {expectedValue}")
     public void checkValueInNotificationCounter(int expectedValue) {
-        String valueText = notificationCounter.getAttribute("data-meta-value");
-        int actualValue = Integer.parseInt(valueText != null ? valueText : "-1");
-        checkComparison(actualValue, expectedValue, Operator.EQUALS); //подумать
+        notificationCounter.shouldHave(attribute("data-meta-value", String.valueOf(expectedValue)));
     }
 
     @Step("Добавлено {count} товаров в корзину")

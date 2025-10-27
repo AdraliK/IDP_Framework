@@ -17,6 +17,7 @@ import static com.codeborne.selenide.Selenide.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
 public abstract class BasePage {
 
@@ -29,7 +30,7 @@ public abstract class BasePage {
 
     @Step("Открыта страница с именем: {titleName}")
     public void checkTitleName(String titleName) {
-        webdriver().shouldHave(WebDriverConditions.title(titleName));
+        Wait().until(titleIs(titleName));
     }
 
     @Step("Ожидаю {seconds} секунд")
