@@ -14,6 +14,13 @@ public class DriverManager {
     }
 
     public static void initOptions() {
+        SelenideLogger.addListener("AllureSelenide",
+                new AllureSelenide()
+                        .screenshots(true)
+                        .savePageSource(true)
+                        .includeSelenideSteps(true)
+        );
+
         Configuration.browser = "chrome";
         Configuration.timeout = 10000;
         Configuration.pageLoadStrategy = "none";
@@ -33,13 +40,6 @@ public class DriverManager {
         options.addArguments("--remote-allow-origins=*");
 
         Configuration.browserCapabilities = options;
-
-        SelenideLogger.addListener("AllureSelenide",
-                new AllureSelenide()
-                        .screenshots(true)
-                        .savePageSource(true)
-                        .includeSelenideSteps(true)
-        );
     }
 
 }
