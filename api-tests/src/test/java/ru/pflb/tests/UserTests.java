@@ -75,6 +75,7 @@ public class UserTests extends BeforeTestApiHooks {
 
         User createdUser = UserBusinessApiSteps.createUser(user);
         int userId = createdUser.getId();
+        dbData.insertUser(userId);
 
         BigDecimal amount = new BigDecimal(moneyAmount);
         BigDecimal previousMoney = createdUser.getMoney();
@@ -92,6 +93,7 @@ public class UserTests extends BeforeTestApiHooks {
         
         User createdUser = UserBusinessApiSteps.createUser(user);
         int userId = createdUser.getId();
+        dbData.insertUser(userId);
 
         BigDecimal negativeAmount = new BigDecimal("-50.00");
 
@@ -113,10 +115,12 @@ public class UserTests extends BeforeTestApiHooks {
 
         User createdUser = UserBusinessApiSteps.createUser(user);
         int userId = createdUser.getId();
+        dbData.insertUser(userId);
 
         Car car = JsonUtils.getJsonAsPojo("cars/car.json", Car.class);
         Car createdCar = CarBusinessApiSteps.createCar(car);
         int carId = createdCar.getId();
+        dbData.insertCar(carId);
 
         User userAfterBuy = UserBusinessApiSteps.buyCarToUser(userId, carId);
         BigDecimal actualMoney = userAfterBuy.getMoney();
@@ -136,10 +140,12 @@ public class UserTests extends BeforeTestApiHooks {
 
         User createdUser = UserBusinessApiSteps.createUser(user);
         int userId = createdUser.getId();
+        dbData.insertUser(userId);
 
         Car car = JsonUtils.getJsonAsPojo("cars/car.json", Car.class);
         Car createdCar = CarBusinessApiSteps.createCar(car);
         int carId = createdCar.getId();
+        dbData.insertCar(carId);
 
         Response response = sendRequest(Method.POST, "/user/%s/buyCar/%s".formatted(userId, carId), null);
         checkResponseStatusCode(response, 406);
@@ -161,24 +167,24 @@ public class UserTests extends BeforeTestApiHooks {
         Allure.step("Очистка данных пользователя после теста", () -> {
             String authToken = DataStorage.get(DataKeys.AUTH_TOKEN);
 
-            String userId = DataStorage.get(DataKeys.USER_ID);
-            if (userId != null && authToken != null) {
+            String userId = String.valueOf(dbData.getUserId());
+            if (authToken != null) {
                 sendRequest(
                         Method.DELETE,
                         "/user/" + userId,
                         null
                 );
             }
-            DataStorage.remove(DataKeys.USER_ID);
+            dbData.deleteUser();
         });
     }
 
     private void cleanCarData() {
         Allure.step("Очистка данных автомобиля после теста", () -> {
             String authToken = DataStorage.get(DataKeys.AUTH_TOKEN);
-            String carId = DataStorage.get(DataKeys.CAR_ID);
+            String carId = String.valueOf(dbData.getCarId());
 
-            if (carId != null && authToken != null) {
+            if (authToken != null) {
                 sendRequest(
                         Method.DELETE,
                         "/car/" + carId,
@@ -186,7 +192,7 @@ public class UserTests extends BeforeTestApiHooks {
                 );
             }
 
-            DataStorage.remove(DataKeys.CAR_ID);
+            dbData.deleteCar();
         });
     }
 
