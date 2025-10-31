@@ -1,0 +1,33 @@
+<div>POST to http://82.142.167.37:4879/car</div>
+
+<h4>Body</h4>
+<div>
+    <pre class="preformated-text">
+{
+    &quot;engineType&quot;: &quot;Diesel&quot;,
+    &quot;id&quot;: 0,
+    &quot;mark&quot;: &quot;Toyota&quot;,
+    &quot;model&quot;: &quot;supra&quot;,
+    &quot;price&quot;: 15000.00
+}    </pre>
+</div>
+
+<h4>Headers</h4>
+<div>
+        <div>Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQHBmbGIucnUiLCJyb2xlcyI6WyJ1c2VyIl0sImlzcyI6Imh0dHA6Ly84Mi4xNDIuMTY3LjM3OjQ4NzkvbG9naW4iLCJleHAiOjE3NjE5NDQzMjF9.nBZAmDKDzZxIw3FRQfs3rbRUkof2oqdlg-wWoj9IR70</div>
+        <div>Accept: */*</div>
+        <div>Content-Type: application/json</div>
+</div>
+
+
+
+<h4>Curl</h4>
+<div>
+curl -v -X POST &#39;http://82.142.167.37:4879/car&#39; -H &#39;Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQHBmbGIucnUiLCJyb2xlcyI6WyJ1c2VyIl0sImlzcyI6Imh0dHA6Ly84Mi4xNDIuMTY3LjM3OjQ4NzkvbG9naW4iLCJleHAiOjE3NjE5NDQzMjF9.nBZAmDKDzZxIw3FRQfs3rbRUkof2oqdlg-wWoj9IR70&#39; -H &#39;Accept: */*&#39; -H &#39;Content-Type: application/json&#39; -d &#39;{
+    &quot;engineType&quot;: &quot;Diesel&quot;,
+    &quot;id&quot;: 0,
+    &quot;mark&quot;: &quot;Toyota&quot;,
+    &quot;model&quot;: &quot;supra&quot;,
+    &quot;price&quot;: 15000.00
+}&#39;
+</div>
