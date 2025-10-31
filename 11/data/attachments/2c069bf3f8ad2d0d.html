@@ -1,0 +1,35 @@
+<div>POST to http://82.142.167.37:4879/user</div>
+
+<h4>Body</h4>
+<div>
+    <pre class="preformated-text">
+{
+    &quot;age&quot;: 24,
+    &quot;firstName&quot;: &quot;Дмитрий&quot;,
+    &quot;id&quot;: 0,
+    &quot;money&quot;: 100.00,
+    &quot;secondName&quot;: &quot;Дрёмов&quot;,
+    &quot;sex&quot;: &quot;MALE&quot;
+}    </pre>
+</div>
+
+<h4>Headers</h4>
+<div>
+        <div>Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQHBmbGIucnUiLCJyb2xlcyI6WyJ1c2VyIl0sImlzcyI6Imh0dHA6Ly84Mi4xNDIuMTY3LjM3OjQ4NzkvbG9naW4iLCJleHAiOjE3NjE5NDYyMTV9.PQ8TIS6JaPLqAq-XEA4obFu7Gvd41DIxafk7tYjhsgI</div>
+        <div>Accept: */*</div>
+        <div>Content-Type: application/json</div>
+</div>
+
+
+
+<h4>Curl</h4>
+<div>
+curl -v -X POST &#39;http://82.142.167.37:4879/user&#39; -H &#39;Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQHBmbGIucnUiLCJyb2xlcyI6WyJ1c2VyIl0sImlzcyI6Imh0dHA6Ly84Mi4xNDIuMTY3LjM3OjQ4NzkvbG9naW4iLCJleHAiOjE3NjE5NDYyMTV9.PQ8TIS6JaPLqAq-XEA4obFu7Gvd41DIxafk7tYjhsgI&#39; -H &#39;Accept: */*&#39; -H &#39;Content-Type: application/json&#39; -d &#39;{
+    &quot;age&quot;: 24,
+    &quot;firstName&quot;: &quot;Дмитрий&quot;,
+    &quot;id&quot;: 0,
+    &quot;money&quot;: 100.00,
+    &quot;secondName&quot;: &quot;Дрёмов&quot;,
+    &quot;sex&quot;: &quot;MALE&quot;
+}&#39;
+</div>
