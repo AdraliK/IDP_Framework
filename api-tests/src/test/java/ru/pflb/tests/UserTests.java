@@ -75,7 +75,6 @@ public class UserTests extends BeforeTestApiHooks {
 
         User createdUser = UserBusinessApiSteps.createUser(user);
         int userId = createdUser.getId();
-        DataStorage.put(DataKeys.USER_ID, Integer.toString(userId));
 
         BigDecimal amount = new BigDecimal(moneyAmount);
         BigDecimal previousMoney = createdUser.getMoney();
@@ -93,7 +92,6 @@ public class UserTests extends BeforeTestApiHooks {
         
         User createdUser = UserBusinessApiSteps.createUser(user);
         int userId = createdUser.getId();
-        DataStorage.put(DataKeys.USER_ID, Integer.toString(userId));
 
         BigDecimal negativeAmount = new BigDecimal("-50.00");
 
@@ -115,12 +113,10 @@ public class UserTests extends BeforeTestApiHooks {
 
         User createdUser = UserBusinessApiSteps.createUser(user);
         int userId = createdUser.getId();
-        DataStorage.put(DataKeys.USER_ID, Integer.toString(userId));
 
         Car car = JsonUtils.getJsonAsPojo("cars/car.json", Car.class);
         Car createdCar = CarBusinessApiSteps.createCar(car);
         int carId = createdCar.getId();
-        DataStorage.put(DataKeys.CAR_ID, Integer.toString(carId));
 
         User userAfterBuy = UserBusinessApiSteps.buyCarToUser(userId, carId);
         BigDecimal actualMoney = userAfterBuy.getMoney();
@@ -140,12 +136,10 @@ public class UserTests extends BeforeTestApiHooks {
 
         User createdUser = UserBusinessApiSteps.createUser(user);
         int userId = createdUser.getId();
-        DataStorage.put(DataKeys.USER_ID, Integer.toString(userId));
 
         Car car = JsonUtils.getJsonAsPojo("cars/car.json", Car.class);
         Car createdCar = CarBusinessApiSteps.createCar(car);
         int carId = createdCar.getId();
-        DataStorage.put(DataKeys.CAR_ID, Integer.toString(carId));
 
         Response response = sendRequest(Method.POST, "/user/%s/buyCar/%s".formatted(userId, carId), null);
         checkResponseStatusCode(response, 406);

@@ -4,6 +4,8 @@ import io.qameta.allure.Step;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 import ru.pflb.dto.Car;
+import ru.pflb.utils.DataKeys;
+import ru.pflb.utils.DataStorage;
 
 import static ru.pflb.steps.technical.ApiSteps.*;
 
@@ -14,7 +16,9 @@ public class CarBusinessApiSteps {
         Response response = sendRequest(Method.POST, "/car", userRequest);
         checkResponseStatusCode(response, 201);
         checkResponseMatchesDto(response, Car.class);
-        return response.as(Car.class);
+        Car car = response.as(Car.class);
+        DataStorage.put(DataKeys.CAR_ID, String.valueOf(car.getId()));
+        return car;
     }
 
     @Step("Получаем автомобиль с ID: {carId}")

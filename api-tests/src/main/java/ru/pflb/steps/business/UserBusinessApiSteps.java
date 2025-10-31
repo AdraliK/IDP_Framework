@@ -5,6 +5,8 @@ import io.restassured.http.Method;
 import io.restassured.response.Response;
 import ru.pflb.dto.Car;
 import ru.pflb.dto.User;
+import ru.pflb.utils.DataKeys;
+import ru.pflb.utils.DataStorage;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,7 +20,9 @@ public class UserBusinessApiSteps {
         Response response = sendRequest(Method.POST, "/user", userRequest);
         checkResponseStatusCode(response, 201);
         checkResponseMatchesDto(response, User.class);
-        return response.as(User.class);
+        User user = response.as(User.class);
+        DataStorage.put(DataKeys.USER_ID, String.valueOf(user.getId()));
+        return user;
     }
 
     @Step("Получаем пользователя с ID: {userId}")
