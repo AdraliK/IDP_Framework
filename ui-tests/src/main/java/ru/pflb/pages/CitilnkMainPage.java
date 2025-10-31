@@ -13,7 +13,8 @@ import java.util.List;
 
 import static com.codeborne.selenide.ClickOptions.usingJavaScript;
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$$x;
+import static com.codeborne.selenide.Selenide.$x;
 
 public class CitilnkMainPage extends BasePage {
 
@@ -82,9 +83,8 @@ public class CitilnkMainPage extends BasePage {
                 .shouldBe(interactable, Duration.ofSeconds(3))
                 .click(usingJavaScript());
         if (closeWindowButton.is(visible, Duration.ofSeconds(15))) {
-            try {
-                closeWindowButton.click();
-            } catch (Exception _) {
+            if (closeWindowButton.isDisplayed()) {
+                closeWindowButton.click(usingJavaScript());
             }
         }
         return this;
