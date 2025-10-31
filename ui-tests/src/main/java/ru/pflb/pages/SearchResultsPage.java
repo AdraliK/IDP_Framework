@@ -14,21 +14,34 @@ import static org.hamcrest.Matchers.*;
 
 public class SearchResultsPage extends BasePage {
 
-    public SearchResultsPage(String query) {
-        checkTitleName(query + " - купить по низкой цене в Ситилинк");
+    public SearchResultsPage() {
     }
 
     private final String productsPath = "//div[@data-meta-name='ProductVerticalSnippet']";
 
     @ElementName("Товары")
-    public final ElementsCollection products = $$x(productsPath);
+    private final ElementsCollection products = $$x(productsPath);
 
     @ElementName("Имена товаров")
-    public final ElementsCollection productNames = $$x(productsPath
+    private final ElementsCollection productNames = $$x(productsPath
             + "//a[@data-meta-name='Snippet__title']");
 
+    @Step("Отображены важные элементы страницы")
+    public SearchResultsPage verifyPageElements() {
+        isNotEmptyListOfElements(products);
+        return this;
+    }
+
+    @Step("Получен список наименований товаров")
+    public List<String> getProductNames(){
+        return getAttributeValuesFromCollection(
+                productNames,
+                "title"
+        ).stream().map(String::toLowerCase).toList();
+    }
+
     @Step("В списке товаров существует товар по запросу: {query}")
-    public void checkProductNamesContains(List<String> productNames, String query) {
+    public SearchResultsPage checkProductNamesContains(List<String> productNames, String query) {
         log.info("Список: {}", productNames.toString());
         Allure.addAttachment("productNames", productNames.toString());
         assertThat(
@@ -36,5 +49,7 @@ public class SearchResultsPage extends BasePage {
                 productNames,
                 hasItem(containsString(query))
         );
+
+        return this;
     }
 }

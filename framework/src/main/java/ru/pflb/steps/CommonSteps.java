@@ -1,13 +1,20 @@
 package ru.pflb.steps;
 
+import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.pflb.utils.Operator;
+
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
 public class CommonSteps {
+
+    protected static final Logger log = LoggerFactory.getLogger(CommonSteps.class);
 
     @Step("Значение '{actualValue}' {operator} '{expectedValue}'")
     public static <T extends Comparable<T>> void checkComparison(T actualValue, T expectedValue, Operator operator) {
@@ -40,6 +47,18 @@ public class CommonSteps {
             );
             default -> throw new IllegalArgumentException("Неизвестный оператор: " + operator);
         }
+    }
+
+    @Step("Списки '{listName}' равны")
+    public static <T> void checkEqualityLists(List<T> actual, List<T> expected, String listName) {
+        log.info("Получены списки: \n%s\n%s".formatted(actual, expected));
+        Allure.addAttachment("expected list", expected.toString());
+        Allure.addAttachment("actual list", actual.toString());
+        assertThat(
+                "Списки не равны",
+                actual,
+                equalTo(expected)
+        );
     }
 
 }

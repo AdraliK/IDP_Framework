@@ -2,7 +2,6 @@ package ru.pflb.pages;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverConditions;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import org.slf4j.Logger;
@@ -14,18 +13,20 @@ import java.util.List;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
 public abstract class BasePage {
 
     protected static final Logger log = LoggerFactory.getLogger(BasePage.class);
 
-    @Step("Открываю страницу: {url}")
-    public void openPage(String url) {
+    public BasePage() {
+
+    }
+
+    @Step("Открываю страницу '{url}' с проверкой заголовка '{titleName}'")
+    public void openPage(String url, String titleName) {
         open(url);
+        checkTitleName(titleName);
     }
 
     @Step("Открыта страница с именем: {titleName}")
@@ -123,18 +124,6 @@ public abstract class BasePage {
             Allure.addAttachment("List", values.toString());
             return values;
         });
-    }
-
-    @Step("Списки '{listName}' равны")
-    public <T> void checkEqualityLists(List<T> actual, List<T> expected, String listName) {
-        log.info("Получены списки: \n%s\n%s".formatted(actual, expected));
-        Allure.addAttachment("expected list", expected.toString());
-        Allure.addAttachment("actual list", actual.toString());
-        assertThat(
-                "Списки не равны",
-                actual,
-                equalTo(expected)
-        );
     }
 
     protected SelenideElement getElementWithText(String text) {

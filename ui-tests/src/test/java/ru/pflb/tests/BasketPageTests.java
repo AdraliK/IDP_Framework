@@ -7,13 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import ru.pflb.dto.ProductData;
-import ru.pflb.pages.BasketPage;
-import ru.pflb.pages.CitilnkMainPage;
-import ru.pflb.utils.config.ConfigManager;
+import ru.pflb.pages.factory.Pages;
+import ru.pflb.steps.CommonSteps;
 
 import java.util.List;
-
-import static com.codeborne.selenide.Selenide.open;
 
 @Feature("Корзина пользователя")
 @Tag("basketPage")
@@ -23,10 +20,8 @@ public class BasketPageTests extends BaseUiTests{
     @Tag("smoke")
     @DisplayName("Провекрка отображения основных элементов страницы с пустой корзиной")
     void emptyBasketPageElementsVisibilityTest() {
-        open(ConfigManager.get().citilinkUrl() + "/order/");
-        BasketPage basketPage = new BasketPage();
-        basketPage.elementIsVisible(basketPage.backToShopButton);
-        basketPage.elementIsVisibleWithText("В корзине нет товаров");
+        Pages.basket().open()
+                .verifyEmptyBasketPageElements();
     }
 
     @Tag("smoke")
@@ -34,45 +29,40 @@ public class BasketPageTests extends BaseUiTests{
     @ParameterizedTest(name = "добавление {0} товаров")
     @ValueSource(ints = {3})
     void filedBasketPageElementsVisibilityTest(int count) {
-        CitilnkMainPage mainPage = new CitilnkMainPage();
+        Pages.main().open()
+                .addProductsInBasket(count)
+                .goToBasket();
 
-        mainPage.addProductsInBasket(count);
-
-        mainPage.clickByElement(mainPage.basketButton);
-        BasketPage basketPage = new BasketPage();
-        basketPage.elementIsVisible(basketPage.regOrderButton);
-        basketPage.elementIsVisible(basketPage.backToShopClickableText);
-        basketPage.elementIsVisible(basketPage.totalSum);
-        basketPage.isNotEmptyListOfElements(basketPage.products);
+        Pages.basket().verifyFiledBasketPageElements();
     }
 
     @DisplayName("Проверка суммирования добавленных товаров в корзине:")
     @ParameterizedTest(name = "добавление {0} товаров")
     @ValueSource(ints = {3})
     void shouldCalculateTotalSumCorrectly(int count) {
-        CitilnkMainPage mainPage = new CitilnkMainPage();
-        mainPage.addProductsInBasket(count);
+        Pages.main().open()
+                .addProductsInBasket(count)
+                .checkValueInNotificationCounter(count)
+                .goToBasket();
 
-        mainPage.checkValueInNotificationCounter(count);
-        mainPage.clickByElement(mainPage.basketButton);
+        Pages.basket().checkTotalSumOrder();
 
-        BasketPage basketPage = new BasketPage();
-        basketPage.checkTotalSumOrder();
     }
 
     @DisplayName("Проверка корректности содержимого корзины:")
     @ParameterizedTest(name = "добавление {0} товаров")
     @ValueSource(ints = {3})
     void shouldContainExactlySelectedProducts(int count) {
-        CitilnkMainPage mainPage = new CitilnkMainPage();
-        mainPage.isNotEmptyListOfElements(mainPage.products);
+        List<ProductData> productDataListActual = Pages.main().open()
+                .verifyPageElements()
+                .addProductsInBasketAndGetData(count);
 
-        List<ProductData> productDataListActual = mainPage.addProductsInBasketAndGetData(count);
-        mainPage.clickByElement(mainPage.basketButton);
+        Pages.main().goToBasket();
 
-        BasketPage basketPage = new BasketPage();
-        List<ProductData> productDataListExpected = basketPage.getProductsWithData();
-        mainPage.checkEqualityLists(productDataListActual, productDataListExpected, "Данные товаров");
+        List<ProductData> productDataListExpected = Pages.basket()
+                .getProductsWithData();
+
+        CommonSteps.checkEqualityLists(productDataListActual, productDataListExpected, "Данные товаров");
     }
 
 }
