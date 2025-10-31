@@ -1,0 +1,1 @@
+[ProductData[name=6.7" Смартфон Samsung Galaxy A06 4/64Gb,  SM-A065F,  IPS,  5000мAч,  золотистый, price=7990], ProductData[name=65" Телевизор Hyundai H-LED65BU7006 4K Ultra HD, черный, СМАРТ ТВ, Android TV, price=39990]]

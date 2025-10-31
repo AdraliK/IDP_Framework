@@ -1,0 +1,7 @@
+{
+  "engineType" : "Diesel",
+  "id" : 5873,
+  "mark" : "Toyota",
+  "model" : "supra",
+  "price" : 15000.00
+}
