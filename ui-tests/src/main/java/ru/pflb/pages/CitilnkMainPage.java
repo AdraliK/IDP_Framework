@@ -17,29 +17,31 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class CitilnkMainPage extends BasePage {
 
+    private final String url = ConfigManager.get().citilinkUrl();
+    private final String titleName = "Ситилинк – интернет-магазин техники, электроники, товаров для дома и ремонта";
+
     public CitilnkMainPage() {
-        openPage(ConfigManager.get().citilinkUrl());
-        checkTitleName("Ситилинк – интернет-магазин техники, электроники, товаров для дома и ремонта");
+
     }
 
     @ElementName("Поле ввода поиска")
-    public SelenideElement searchInput = $x("//input[@placeholder='Поиск по товарам']");
+    private SelenideElement searchInput = $x("//input[@placeholder='Поиск по товарам']");
 
     @ElementName("Каталог товаров")
-    public final SelenideElement catalogButton = getElementWithText("Каталог товаров");
+    private final SelenideElement catalogButton = getElementWithText("Каталог товаров");
 
     @ElementName("Войти")
-    public final SelenideElement loginButton = getElementWithText("Войти");
+    private final SelenideElement loginButton = getElementWithText("Войти");
 
     @ElementName("Корзина")
-    public final SelenideElement basketButton = getElementWithText("Корзина");
+    private final SelenideElement basketButton = getElementWithText("Корзина");
 
     @ElementName("Счётчик кол-во добавленных товаров в корзину")
-    public final SelenideElement notificationCounter =
+    private final SelenideElement notificationCounter =
             $x("//div[@data-meta-name='NotificationCounter']");
 
     @ElementName("Крестик всплывающего окна")
-    public final SelenideElement closeWindowButton =
+    private final SelenideElement closeWindowButton =
             $x("//div[@data-meta-name='UpsaleBasketLayout']//button[contains(@data-meta-name,'close-popup')]");
 
     private final String bestProductsComponentPath = "//h3[text()='Лучшие предложения']/ancestor::section";
@@ -48,14 +50,30 @@ public class CitilnkMainPage extends BasePage {
             + "//div[@data-meta-name='ProductsCompilation__slide'][.//span[@data-meta-price]]";
 
     @ElementName("Товары")
-    public final ElementsCollection products = $$x(productsPath);
+    private final ElementsCollection products = $$x(productsPath);
 
-    public final String productPricesPath = ".//span[@data-meta-price]";
+    private final String productPricesPath = ".//span[@data-meta-price]";
 
-    public final String productNamesPath = ".//a[@title]";
+    private final String productNamesPath = ".//a[@title]";
+
+    @Step("Открываю главную страницу Ситилинк")
+    public CitilnkMainPage open() {
+        openPage(url, titleName);
+        return this;
+    }
+
+    @Step("Отображены важные элементы страницы")
+    public CitilnkMainPage verifyPageElements() {
+        elementIsVisible(searchInput);
+        elementIsVisible(loginButton);
+        elementIsVisible(catalogButton);
+        elementIsVisible(basketButton);
+        isNotEmptyListOfElements(products);
+        return this;
+    }
 
     @Step("Добавлен в корзину товар из списка 'Лучшие предложения' под номером {index}")
-    public void addItemOfBestProductInBasket(int index) {
+    public CitilnkMainPage addItemOfBestProductInBasket(int index) {
         products.get(index)
                 .shouldBe(visible)
                 .scrollTo()
@@ -69,18 +87,21 @@ public class CitilnkMainPage extends BasePage {
             } catch (Exception _) {
             }
         }
+        return this;
     }
 
     @Step("Счётчик кол-во добавленных товаров в корзину равен {expectedValue}")
-    public void checkValueInNotificationCounter(int expectedValue) {
+    public CitilnkMainPage checkValueInNotificationCounter(int expectedValue) {
         notificationCounter.shouldHave(attribute("data-meta-value", String.valueOf(expectedValue)));
+        return this;
     }
 
     @Step("Добавлено {count} товаров в корзину")
-    public void addProductsInBasket(int count) {
+    public CitilnkMainPage addProductsInBasket(int count) {
         for (int i = 0; i < count; i++) {
             addItemOfBestProductInBasket(i);
         }
+        return this;
     }
 
     @Step("Добавлено {count} товаров в корзину с сохранением данных")
@@ -100,5 +121,16 @@ public class CitilnkMainPage extends BasePage {
         }
 
         return productDataList;
+    }
+
+    @Step("Переход в корзину")
+    public void goToBasket(){
+        clickByElement(basketButton);
+    }
+
+    @Step("Выполнен поиск по запросу")
+    public void searchByQuery(String query){
+        inputTextInElement(searchInput, query);
+        pressEnter(searchInput);
     }
 }

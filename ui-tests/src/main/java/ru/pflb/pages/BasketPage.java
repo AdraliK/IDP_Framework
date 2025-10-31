@@ -6,6 +6,7 @@ import io.qameta.allure.Step;
 import ru.pflb.annotations.ElementName;
 import ru.pflb.dto.ProductData;
 import ru.pflb.utils.Operator;
+import ru.pflb.utils.config.ConfigManager;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -17,38 +18,64 @@ import static ru.pflb.steps.CommonSteps.checkComparison;
 
 public class BasketPage extends BasePage {
 
+    private final String url = ConfigManager.get().citilinkUrl() + "/order/";
+    private final String titleName = "Оформление заказа";
+
     public BasketPage() {
-        checkTitleName("Оформление заказа");
+
     }
 
     @ElementName("Перейти к оформлению")
-    public final SelenideElement regOrderButton = getElementWithText("Перейти к оформлению");
+    private final SelenideElement regOrderButton = getElementWithText("Перейти к оформлению");
 
     @ElementName("Кнопка 'Вернуться к покупкам'")
-    public final SelenideElement backToShopButton = $x("//a[text()='Вернуться к покупкам']");
+    private final SelenideElement backToShopButton = $x("//a[text()='Вернуться к покупкам']");
 
     @ElementName("Анкор 'Вернуться к покупкам'")
-    public final SelenideElement backToShopClickableText = $x("//span[text()='Вернуться к покупкам']");
+    private final SelenideElement backToShopClickableText = $x("//span[text()='Вернуться к покупкам']");
 
     @ElementName("Итоговая сумма")
-    public final SelenideElement totalSum =
+    private final SelenideElement totalSum =
             $x("//div[@data-meta-name='BasketSummary']//span[@data-meta-price]");
 
     private final String productsInBasketPath = "//div[@data-meta-name='BasketSnippet']";
 
     @ElementName("Товары")
-    public final ElementsCollection products = $$x(productsInBasketPath);
+    private final ElementsCollection products = $$x(productsInBasketPath);
 
     @ElementName("Цены товаров")
-    public final ElementsCollection productPrices = $$x(productsInBasketPath
+    private final ElementsCollection productPrices = $$x(productsInBasketPath
             + "//div[@data-meta-name='AvailableProductStatus__price']//span[@data-meta-price]");
 
     @ElementName("Имена товаров")
-    public final ElementsCollection productNames = $$x(productsInBasketPath
+    private final ElementsCollection productNames = $$x(productsInBasketPath
             + "//a[@title]");
 
+    @Step("Открываю страницу корзины")
+    public BasketPage open() {
+        openPage(url, titleName);
+        return this;
+    }
+
+
+    @Step("Отображены важные элементы пустой корзины")
+    public BasketPage verifyEmptyBasketPageElements() {
+        elementIsVisible(backToShopButton);
+        elementIsVisibleWithText("В корзине нет товаров");
+        return this;
+    }
+
+    @Step("Отображены важные элементы не пустой корзины")
+    public BasketPage verifyFiledBasketPageElements() {
+        elementIsVisible(regOrderButton);
+        elementIsVisible(backToShopClickableText);
+        elementIsVisible(totalSum);
+        isNotEmptyListOfElements(products);
+        return this;
+    }
+
     @Step("Сумма заказа соответсвует сумме стоимости товаров")
-    public void checkTotalSumOrder() {
+    public BasketPage checkTotalSumOrder() {
         List<String> listOfProductsPrice = getAttributeValuesFromCollection(
                 productPrices,
                 "data-meta-price"
@@ -63,6 +90,7 @@ public class BasketPage extends BasePage {
         int actualSum = Integer.parseInt(actualSumText);
 
         checkComparison(actualSum, expectedSum, Operator.EQUALS);
+        return this;
     }
 
     @Step("Получен список товаров из корзины с данными")
