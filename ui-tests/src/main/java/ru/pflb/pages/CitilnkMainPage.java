@@ -11,10 +11,9 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.codeborne.selenide.Condition.attribute;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$$x;
-import static com.codeborne.selenide.Selenide.$x;
+import static com.codeborne.selenide.ClickOptions.usingJavaScript;
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selenide.*;
 
 public class CitilnkMainPage extends BasePage {
 
@@ -58,12 +57,17 @@ public class CitilnkMainPage extends BasePage {
     @Step("Добавлен в корзину товар из списка 'Лучшие предложения' под номером {index}")
     public void addItemOfBestProductInBasket(int index) {
         products.get(index)
+                .shouldBe(visible)
                 .scrollTo()
                 .hover()
                 .$x(".//button[@data-meta-name='Snippet__cart-button']")
-                .click();
+                .shouldBe(interactable, Duration.ofSeconds(3))
+                .click(usingJavaScript());
         if (closeWindowButton.is(visible, Duration.ofSeconds(15))) {
-            closeWindowButton.click();
+            try {
+                closeWindowButton.click();
+            } catch (Exception _) {
+            }
         }
     }
 
